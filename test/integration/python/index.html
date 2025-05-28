@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <img id="video" style="max-width: 100%">
+    
+    <script>
+        const img = document.getElementById('video');
+        // const ws = new WebSocket('ws://localhost:8765');
+        const ws = new WebSocket('ws://localhost:8080');
+
+        ws.onmessage = (event) => {
+            const blob = new Blob([event.data], { type: 'image/jpeg' });
+            img.src = URL.createObjectURL(blob);
+        };
+
+        ws.onopen = () => console.log('Connected');
+        ws.onclose = () => console.log('Disconnected');
+        ws.onerror = (err) => console.error('WebSocket error:', err);
+    </script>
+</body>
+</html>

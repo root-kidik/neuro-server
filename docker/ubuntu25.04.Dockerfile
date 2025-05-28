@@ -9,6 +9,7 @@ RUN apt-get -y update                                                           
     git                                                                                                                                        \
     python3                                                                                                                                    \
     python3-pip                                                                                                                                \
+    libopencv-dev                                                                                                                              \
     libboost-all-dev                                                                                                                           \
     lldb                                                                                                                                       \
     clang-format                                                                                                                               \
@@ -18,6 +19,7 @@ RUN apt-get -y update                                                           
     python3 -m pip install                                                                                                                     \
     yandex-taxi-testsuite                                                                                                                      \
     colorama                                                                                                                                   \
+    opencv-python                                                                                                                              \
     --break-system-packages                                                                                                                 && \
     apt-get -y autoremove                                                                                                                   && \
     apt-get -y autoclean                                                                                                                    && \
