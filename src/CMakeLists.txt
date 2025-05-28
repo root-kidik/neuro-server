@@ -1,7 +1,9 @@
-file(GLOB_RECURSE SOURCES *.cpp)
+add_subdirectory(core)
+add_subdirectory(yolo)
+add_subdirectory(udp_server)
+add_subdirectory(frame_buffer)
+add_subdirectory(websocket_server)
 
-find_package(OpenCV REQUIRED)
-
-add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
+add_executable(${PROJECT_NAME} Main.cpp Service.hpp Service.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE core yolo udp_server websocket_server frame_buffer)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

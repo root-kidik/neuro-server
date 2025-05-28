@@ -20,7 +20,7 @@ Thread::~Thread()
     m_thread.join();
 }
 
-void Thread::setName(const std::string& name)
+void Thread::SetName(const std::string& name)
 {
     assert(name.size() <= kThreadNameMaxLen - 1 && "thread name too long");
 
@@ -30,7 +30,7 @@ void Thread::setName(const std::string& name)
     }
 }
 
-void Thread::setAffinity()
+void Thread::SetAffinity()
 {
     static std::atomic<std::uint8_t> core_id = 0;
 

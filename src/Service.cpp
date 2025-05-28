@@ -4,15 +4,12 @@ namespace neuro_server
 {
 
 Service::Service()
-    : m_io_thread{"IO Context", [this]() { m_io_context.run(); }}
-    , m_video_receiver{m_io_context}
-    // , m_video_streamer{m_io_context}
+    : m_udp_server{udp_server::MakeUdpServer()}
+    , m_websocket_server{websocket_server::MakeWebsocketServer()}
+    , m_frame_buffer{frame_buffer::MakeFrameBuffer()}
 {
-}
-
-Service::~Service()
-{
-    m_io_context.stop();
+    m_udp_server->Subscribe(*m_frame_buffer);
+    m_frame_buffer->Subscribe(*m_websocket_server);
 }
 
 } // namespace neuro_server

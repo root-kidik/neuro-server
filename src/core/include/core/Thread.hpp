@@ -17,8 +17,8 @@ public:
                     fn         = std::forward<Callable>(fn),
                     args_tuple = std::make_tuple(std::forward<Args>(args)...)]()
                    {
-                       setAffinity();
-                       setName(name);
+                       SetAffinity();
+                       SetName(name);
                        std::apply(fn, args_tuple);
                    }}
     {
@@ -29,8 +29,8 @@ public:
 private:
     std::thread m_thread;
 
-    static void setName(const std::string& name);
-    static void setAffinity();
+    static void SetName(const std::string& name);
+    static void SetAffinity();
 };
 
 } // namespace core
