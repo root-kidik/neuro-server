@@ -1,0 +1,147 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 1
+    },
+    "configurePresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "inherits": ["debug-flags"],
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "inherits": ["release-flags"],
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        },
+        {
+            "name": "debug-asan-ubsan",
+            "displayName": "Debug Asan UBsan",
+            "inherits": ["debug-flags", "asan-ubsan-flags"],
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        },
+        {
+            "name": "release-asan-ubsan",
+            "displayName": "Release Asan UBsan",
+            "inherits": ["release-flags", "asan-ubsan-flags"],
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        },
+        {
+            "name": "debug-tsan",
+            "displayName": "Debug Tsan",
+            "inherits": ["debug-flags", "tsan-flags"],
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        },
+        {
+            "name": "release-tsan",
+            "displayName": "Release Tsan",
+            "inherits": ["release-flags", "tsan-flags"],
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        },
+        {
+            "name": "debug-flags",
+            "inherits": ["base-flags"],
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release-flags",
+            "inherits": ["base-flags"],
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
+            "name": "base-flags",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_PRESET_NAME": "${presetName}",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_CXX_STANDARD": "20",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_POSITION_INDEPENDENT_CODE": "ON",
+                "CMAKE_ARCHIVE_OUTPUT_DIRECTORY": "${sourceDir}/build-${presetName}/lib",
+                "CMAKE_LIBRARY_OUTPUT_DIRECTORY": "${sourceDir}/build-${presetName}/lib",
+                "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/build-${presetName}/bin",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_USE_LINKER": "lld"
+            }
+        },
+        {
+            "name": "asan-ubsan-flags",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS"
+            }
+        },
+        {
+            "name": "tsan-flags",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=thread -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+        {
+            "name": "debug-asan-ubsan",
+            "configurePreset": "debug-asan-ubsan"
+        },
+        {
+            "name": "release-asan-ubsan",
+            "configurePreset": "release-asan-ubsan"
+        },
+        {
+            "name": "debug-tsan",
+            "configurePreset": "debug-tsan"
+        },
+        {
+            "name": "release-tsan",
+            "configurePreset": "release-tsan"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+        {
+            "name": "debug-asan-ubsan",
+            "configurePreset": "debug-asan-ubsan"
+        },
+        {
+            "name": "release-asan-ubsan",
+            "configurePreset": "release-asan-ubsan"
+        },
+        {
+            "name": "debug-tsan",
+            "configurePreset": "debug-tsan"
+        },
+        {
+            "name": "release-tsan",
+            "configurePreset": "release-tsan"
+        }
+    ]
+}

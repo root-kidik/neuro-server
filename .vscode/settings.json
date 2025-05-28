@@ -1,0 +1,6 @@
+{
+    "cmake.debugConfig": {
+        "MIMode": "lldb",
+        "type": "lldb"
+    }
+}

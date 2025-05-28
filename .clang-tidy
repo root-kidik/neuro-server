@@ -1,0 +1,136 @@
+Checks: >
+  -*,
+  bugprone-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  concurrency-*,
+  boost-*,
+  cert-*,
+  hicpp-*,
+  google-*,
+  -bugprone-easily-swappable-parameters,
+  -misc-include-cleaner,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length,
+  -cert-arr39-c,
+  -cert-con36-c,
+  -cert-con54-cpp,
+  -cert-ctr56-cpp,
+  -cert-dcl03-c,
+  -cert-dcl16-c,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp,
+  -cert-dcl54-cpp,
+  -cert-err09-cpp,
+  -cert-err61-cpp,
+  -cert-exp42-c,
+  -cert-fio38-c,
+  -cert-flp37-c,
+  -cert-int09-c,
+  -cert-msc24-c,
+  -cert-msc30-c,
+  -cert-msc32-c,
+  -cert-msc33-c,
+  -cert-msc54-cpp,
+  -cert-oop11-cpp,
+  -cert-oop54-cpp,
+  -cert-pos44-c,
+  -cert-pos47-c,
+  -cert-sig30-c,
+  -cert-str34-c,
+  -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-c-copy-assignment-signature,
+  -cppcoreguidelines-explicit-virtual-functions,
+  -cppcoreguidelines-macro-to-enum,
+  -cppcoreguidelines-narrowing-conversions,
+  -cppcoreguidelines-noexcept-destructor,
+  -cppcoreguidelines-noexcept-move-operations,
+  -cppcoreguidelines-noexcept-swap,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-use-default-member-init,
+  -google-readability-braces-around-statements,
+  -google-readability-function-size,
+  -google-readability-namespace-comments,
+  -hicpp-avoid-c-arrays,
+  -hicpp-avoid-goto,
+  -hicpp-braces-around-statements,
+  -hicpp-deprecated-headers,
+  -hicpp-explicit-conversions,
+  -hicpp-function-size,
+  -hicpp-invalid-access-moved,
+  -hicpp-member-init,
+  -hicpp-move-const-arg,
+  -hicpp-named-parameter,
+  -hicpp-new-delete-operators,
+  -hicpp-no-array-decay,
+  -hicpp-no-malloc,
+  -hicpp-noexcept-move,
+  -hicpp-special-member-functions,
+  -hicpp-static-assert,
+  -hicpp-undelegated-constructor,
+  -hicpp-uppercase-literal-suffix,
+  -hicpp-use-auto,
+  -hicpp-use-emplace,
+  -hicpp-use-equals-default,
+  -hicpp-use-equals-delete,
+  -hicpp-use-noexcept,
+  -hicpp-use-nullptr,
+  -hicpp-use-override,
+  -hicpp-vararg,
+CheckOptions:
+  - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value: true
+  - key: readability-identifier-naming.NamespaceCase
+    value: lower_case
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.MemberCase
+    value: lower_case
+  - key: readability-identifier-naming.ClassMemberCase
+    value: lower_case
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: lower_case
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: m_
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConstexprVariablePrefix
+    value: k
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.GlobalConstantPrefix
+    value: k
+  - key: readability-identifier-naming.StaticConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.StaticConstantPrefix
+    value: k
+  - key: readability-identifier-naming.StaticVariableCase
+    value: lower_case
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.MacroDefinitionIgnoredRegexp
+    value: '^[A-Z]+(_[A-Z]+)*_$'
+  - key: readability-identifier-naming.TypeAliasCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypedefCase
+    value: CamelCase
+HeaderFilterRegex: '^(src)/.*'
+WarningsAsErrors: '*'
+SystemHeaders: false
+UseColor: true

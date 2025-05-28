@@ -1,0 +1,210 @@
+# Project
+Standard: c++20
+ColumnLimit: 120
+
+# Indentation
+AccessModifierOffset: -4
+BitFieldColonSpacing: Both
+ContinuationIndentWidth: 4
+IndentCaseLabels: true
+IndentCaseBlocks: false
+IndentExternBlock: Indent
+IndentPPDirectives: BeforeHash
+IndentRequires: false
+IndentWidth: 4
+IndentWrappedFunctionNames: false
+TabWidth: 4
+UseTab: Never
+
+# Alignment
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
+AlignConsecutiveBitFields:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignTrailingComments: true
+
+# Allow
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortLambdasOnASingleLine: All
+
+# Break
+BreakAfterReturnType: Automatic
+AlwaysBreakBeforeMultilineStrings: false
+BreakTemplateDeclarations: Yes
+BreakBeforeConceptDeclarations: true
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakBeforeBinaryOperators: None
+BreakInheritanceList: BeforeComma
+BreakStringLiterals: false
+
+# Initializers & arguments
+BinPackArguments: false
+BinPackParameters: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+Cpp11BracedListStyle: true
+
+# Braces
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+# Namespaces
+CompactNamespaces: false
+FixNamespaceComments: true
+NamespaceIndentation: None
+
+# Derive
+DeriveLineEnding: false
+DerivePointerAlignment: false
+
+# Empty lines
+EmptyLineBeforeAccessModifier: Always
+KeepEmptyLines:
+  AtEndOfFile: true
+  AtStartOfBlock: false
+  AtStartOfFile: false
+MaxEmptyLinesToKeep: 2
+
+# Sorting
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Priority: 105
+    Regex: "^<boost(.+)>$"
+  - Priority: 150
+    Regex: "^<amcs_proxy(.+)>$"
+  - Priority: 151
+    Regex: "^<arlm_client(.+)>$"
+  - Priority: 152
+    Regex: "^<core(.+)>$"
+  - Priority: 153
+    Regex: "^<database(.+)>$"
+  - Priority: 154
+    Regex: "^<fpga_router(.+)>$"
+  - Priority: 155
+    Regex: "^<identification_service(.+)>$"
+  - Priority: 156
+    Regex: "^<scheduler(.+)>$"
+  - Priority: 157
+    Regex: "^<target_extractor(.+)>$"
+  - Priority: 158
+    Regex: "^<target_identifier(.+)>$"
+  - Priority: 101
+    Regex: ^<(.+hpp)>$
+  - Priority: 100
+    Regex: ^<(.+)>$
+  - Priority: 200
+    Regex: ^\"(.+)\"$
+SortIncludes: true
+SortUsingDeclarations: true
+
+# Penalties
+PenaltyBreakAssignment: 1000
+PenaltyBreakBeforeFirstCallParameter: 1000
+PenaltyBreakComment: 200
+PenaltyBreakFirstLessLess: 100
+PenaltyBreakString: 1
+PenaltyBreakTemplateDeclaration: 0
+PenaltyExcessCharacter: 5
+PenaltyIndentedWhitespace: 1
+PenaltyReturnTypeOnItsOwnLine: 500
+
+# Pointer alignment
+PointerAlignment: Left
+
+# Comments
+ReflowComments: false
+
+# Spaces
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+# Line endings
+UseCRLF: false
+
+# Separators
+IntegerLiteralSeparator:
+  Binary: 4
+  Decimal: 3
+  Hex: 2
+
+# Qualifiers (const, volatile, static, etc)
+QualifierAlignment: Custom
+QualifierOrder:
+  - static
+  - inline
+  - constexpr
+  - const
+  - volatile
+  - type

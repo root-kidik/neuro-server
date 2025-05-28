@@ -1,0 +1,8 @@
+build*
+.vscode/*
+!.vscode/settings.json
+sync.lock
+__pycache__
+.pytest_cache
+*.log
+*.out
