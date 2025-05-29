@@ -34,8 +34,7 @@ async def test_video(neuro_server):
             for offset in range(0, total_bytes, CHUNK_SIZE):
                 chunk = data[offset:min(offset + CHUNK_SIZE, total_bytes)]
                 sock.sendto(chunk, server_addr)
-
-            time.sleep(frame_delay)
+                time.sleep(frame_delay / (total_bytes / CHUNK_SIZE))
 
     finally:
         cap.release()

@@ -8,7 +8,7 @@ Service::Service()
     : m_udp_server{udp_server::MakeUdpServer()}
     , m_websocket_server{websocket_server::MakeWebsocketServer()}
     , m_frame_buffer{frame_buffer::MakeFrameBuffer()}
-    , m_yolo{yolo::MakeYolo({.model_path{"/workspaces/neuro-server/config/yolo11n.onnx"}})}
+    , m_yolo{yolo::MakeYolo({.model_path{"/workspaces/neuro-server/config/yolo11l.onnx"}, .is_cuda_enabled{true}})}
     , m_is_runned{true}
     , m_thread{"Service",
                [this]()
