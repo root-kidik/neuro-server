@@ -1,6 +1,6 @@
-#include <udp_server/UdpServer.hpp>
-
 #include <iostream>
+
+#include <udp_server/UdpServer.hpp>
 
 namespace
 {

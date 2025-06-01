@@ -3,11 +3,9 @@
 #include <array>
 #include <condition_variable>
 #include <cstdint>
-#include <functional>
 #include <mutex>
+#include <optional>
 #include <queue>
-#include <unordered_map>
-#include <vector>
 
 #include <frame_buffer/IFrameBuffer.hpp>
 
@@ -29,6 +27,7 @@ struct Chunk
 
 struct Frame
 {
+    std::uint32_t frame_id{};
     std::uint16_t total_chunks{};
     std::uint16_t received_chunk_count{};
 
@@ -47,10 +46,10 @@ public:
 private:
     void ProcessDatagram();
 
-    IFrameConsumer&                          m_frame_consumer;
-    std::unordered_map<std::uint32_t, Frame> m_frames;
+    IFrameConsumer& m_frame_consumer;
+    Frame           m_frame;
 
-    std::atomic<bool> m_is_running;
+    std::atomic<bool>       m_is_running;
     std::mutex              m_datagrams_queue_mutex;
     std::condition_variable m_datagrams_queue_cv;
 

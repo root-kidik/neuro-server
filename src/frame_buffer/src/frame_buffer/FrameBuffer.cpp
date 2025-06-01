@@ -64,50 +64,39 @@ void FrameBuffer::ProcessDatagram()
     std::uint16_t total_chunks = *reinterpret_cast<const std::uint16_t*>(datagram.data() + 6);
     std::uint16_t chunk_size   = *reinterpret_cast<const std::uint16_t*>(datagram.data() + 8);
 
-    // std::cerr << "=======================\n";
-    // std::cerr << "recv_size: " << size << '\n';
-    // std::cerr << "frame_id: " << frame_id << '\n';
-    // std::cerr << "chunk_id: " << chunk_id << '\n';
-    // std::cerr << "total_chunks: " << total_chunks << '\n';
-    // std::cerr << "chunk_size: " << chunk_size << '\n';
-
     assert(chunk_size != 0);
     assert(size == kHeaderSize + chunk_size);
     assert(chunk_id < total_chunks);
     assert(chunk_id < kMaxChunks);
 
-    auto it = m_frames.find(frame_id);
-    if (it == m_frames.end())
+    if (m_frame.frame_id != frame_id)
     {
-        it = m_frames.emplace(frame_id, Frame{}).first;
+        m_frame = Frame{};
+        m_frame.frame_id = frame_id;
     }
     else
     {
-        assert(it->second.total_chunks == total_chunks);
+        assert(m_frame.total_chunks == total_chunks);
     }
 
-    auto& frame = it->second;
-    auto& chunk = frame.chunks[chunk_id];
-
+    auto& chunk = m_frame.chunks[chunk_id];
     chunk.size = chunk_size;
 
     std::memcpy(chunk.data.begin(), datagram.begin() + kHeaderSize, chunk_size);
 
-    frame.total_chunks     = total_chunks;
-    frame.received_chunk_count++;
+    m_frame.total_chunks = total_chunks;
+    m_frame.received_chunk_count++;
 
-    if (frame.received_chunk_count == frame.total_chunks)
+    if (m_frame.received_chunk_count == m_frame.total_chunks)
     {
         std::vector<std::uint8_t> frame_data;
 
-        for (const auto& [data, size] : frame.chunks)
+        for (const auto& [data, size] : m_frame.chunks)
         {
             frame_data.insert(frame_data.end(), data.begin(), data.begin() + size);
         }
 
         m_frame_consumer.OnFrame(std::move(frame_data));
-
-        m_frames.erase(it);
     }
 }
 
