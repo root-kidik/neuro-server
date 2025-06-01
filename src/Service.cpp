@@ -5,7 +5,7 @@ namespace neuro_server
 {
 
 Service::Service()
-    : m_frame_buffer{frame_buffer::MakeFrameBuffer()}
+    : m_frame_buffer{frame_buffer::MakeFrameBuffer(*this)}
     , m_udp_server{udp_server::MakeUdpServer(*m_frame_buffer)}
     , m_websocket_server{websocket_server::MakeWebsocketServer()}
     , m_yolo{yolo::MakeYolo({.model_path{"/workspaces/neuro-server/config/yolo11n.onnx"}})}
@@ -25,7 +25,8 @@ Service::Service()
                            m_frames_queue.pop();
                        }
 
-                        cv::Mat image = cv::imdecode(frame, cv::IMREAD_COLOR);
+                       auto image = cv::imdecode(cv::Mat(1, static_cast<int>(frame.size()), CV_8UC1, frame.data()),
+                                                 cv::IMREAD_COLOR);
 
                        if (image.empty())
                        {
@@ -60,7 +61,7 @@ Service::Service()
                        }
 
                        std::vector<std::uint8_t> jpeg_buffer;
-                       std::vector<int>     params =
+                       std::vector<int>          params =
                            {cv::IMWRITE_JPEG_QUALITY, 85, cv::IMWRITE_JPEG_PROGRESSIVE, 1, cv::IMWRITE_JPEG_OPTIMIZE, 1};
                        cv::imencode(".jpg", image, jpeg_buffer, params);
 
@@ -68,7 +69,6 @@ Service::Service()
                    }
                }}
 {
-    m_frame_buffer->Subscribe(*this);
 }
 
 Service::~Service()

@@ -3,25 +3,27 @@
 #include <mutex>
 #include <queue>
 
+#include <frame_buffer/IFrameConsumer.hpp>
+#include <websocket_server/IWebsocketServer.hpp>
+
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
 #include <core/Thread.hpp>
 
-#include <websocket_server/IWebsocketServer.hpp>
-#include <frame_buffer/IFrameConsumer.hpp>
-
 namespace websocket_server
 {
 
-class WebsocketServer final : public IWebsocketServer, private boost::asio::noncopyable
+class WebsocketServer final
+    : public IWebsocketServer
+    , private boost::asio::noncopyable
 {
 public:
     explicit WebsocketServer();
     ~WebsocketServer() override;
 
     void OnFrame(std::vector<std::uint8_t>&& frame) override;
-    
+
 private:
     boost::asio::awaitable<void> Listen();
     boost::asio::awaitable<void> StreamFrames(boost::beast::websocket::stream<boost::beast::tcp_stream> ws);

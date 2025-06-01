@@ -1,4 +1,5 @@
 #include <udp_server/UdpServer.hpp>
+
 #include <iostream>
 
 namespace
@@ -9,15 +10,13 @@ constexpr std::uint16_t kUdpPort = 8'010;
 namespace udp_server
 {
 
-UdpServer::UdpServer(IFrameChunkConsumer& chunk_consumer)
-    : m_chunk_consumer{chunk_consumer}
+UdpServer::UdpServer(IDatagramConsumer& datagram_consumer)
+    : m_datagram_consumer{datagram_consumer}
     , m_socket{m_io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), kUdpPort)}
-    , m_waited_size{0}
-    , m_received_size{0}
     , m_thread{"udp",
                [this]()
                {
-                   boost::asio::co_spawn(m_io_context, ReceiveChunk(), boost::asio::detached);
+                   boost::asio::co_spawn(m_io_context, Receive(), boost::asio::detached);
                    m_io_context.run();
                }}
 {
@@ -28,37 +27,18 @@ UdpServer::~UdpServer()
     m_io_context.stop();
 }
 
-boost::asio::awaitable<void> UdpServer::ReceiveChunk()
+boost::asio::awaitable<void> UdpServer::Receive()
 {
-    std::array<std::uint8_t, kChunkSize> buffer{};
-
-    boost::asio::ip::udp::endpoint remote_endpoint;
+    std::array<std::uint8_t, kMaxDatagramSize> buffer{};
+    boost::asio::ip::udp::endpoint             remote_endpoint;
 
     for (;;)
     {
-        if (m_received_size >= m_waited_size)
-        {
-            std::size_t bytes_read = 0;
-            while (bytes_read != 4)
-            {
-                bytes_read =  co_await m_socket.async_receive_from(boost::asio::buffer(&m_waited_size, sizeof(m_waited_size)),
-                                                 remote_endpoint,
-                                                 boost::asio::use_awaitable);
-            }
-            m_received_size = 0;
-
-            std::cerr << "wait: " << m_waited_size << '\n'; 
-
-            m_chunk_consumer.OnNewFrame(m_waited_size);
-        }
-
-        std::size_t bytes_received = co_await m_socket.async_receive_from(boost::asio::buffer(buffer.data(), buffer.size()),
+        std::size_t bytes_received = co_await m_socket.async_receive_from(boost::asio::buffer(buffer),
                                                                           remote_endpoint,
                                                                           boost::asio::use_awaitable);
 
-        std::cerr << "recv: " << m_received_size << '\n'; 
-        m_chunk_consumer.OnFrameChunk(buffer, bytes_received);
-        m_received_size += bytes_received;
+        m_datagram_consumer.OnDatagram(buffer, bytes_received);
     }
 }
 

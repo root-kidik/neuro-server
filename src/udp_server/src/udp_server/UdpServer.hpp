@@ -1,6 +1,6 @@
 #pragma once
 
-#include <udp_server/IFrameChunkConsumer.hpp>
+#include <udp_server/IDatagramConsumer.hpp>
 #include <udp_server/IUdpServer.hpp>
 
 #include <boost/asio.hpp>
@@ -15,20 +15,17 @@ class UdpServer final
     , private boost::asio::noncopyable
 {
 public:
-    explicit UdpServer(IFrameChunkConsumer& chunk_consumer);
+    explicit UdpServer(IDatagramConsumer& datagram_consumer);
     ~UdpServer() override;
 
 private:
-    boost::asio::awaitable<void> ReceiveChunk();
+    boost::asio::awaitable<void> Receive();
 
-    IFrameChunkConsumer& m_chunk_consumer;
+    IDatagramConsumer& m_datagram_consumer;
 
     boost::asio::io_context m_io_context;
 
     boost::asio::ip::udp::socket m_socket;
-
-    std::uint32_t m_waited_size;
-    std::uint32_t m_received_size;
 
     core::Thread m_thread;
 };

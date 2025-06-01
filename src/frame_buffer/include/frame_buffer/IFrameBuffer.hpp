@@ -1,15 +1,13 @@
 #pragma once
 
 #include <frame_buffer/IFrameConsumer.hpp>
-#include <udp_server/IFrameChunkConsumer.hpp>
+#include <udp_server/IDatagramConsumer.hpp>
 
 namespace frame_buffer
 {
 
-class IFrameBuffer : public udp_server::IFrameChunkConsumer 
+class IFrameBuffer : public udp_server::IDatagramConsumer
 {
-public:
-    virtual void Subscribe(IFrameConsumer& consumer) = 0;
 };
 
 } // namespace frame_buffer

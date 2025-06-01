@@ -7,6 +7,6 @@
 namespace frame_buffer
 {
 
-std::unique_ptr<IFrameBuffer> MakeFrameBuffer();
+std::unique_ptr<IFrameBuffer> MakeFrameBuffer(IFrameConsumer& consumer);
 
 }

@@ -25,7 +25,7 @@ Yolo::Yolo(const YoloInitParams& params)
     , m_rectangle_confidence_threshold{params.rectangle_confidence_threshold}
     , m_non_max_suppression_threshold{params.non_max_suppression_threshold}
     , m_is_cuda_enabled{params.is_cuda_enabled}
-    , m_is_half_enabled{params.is_half_enabled} 
+    , m_is_half_enabled{params.is_half_enabled}
 {
     Ort::SessionOptions sessionm_options;
 

@@ -1,43 +1,113 @@
 #include <cassert>
+#include <cstring>
+#include <iostream>
 
 #include <frame_buffer/FrameBuffer.hpp>
 
 namespace
 {
-constexpr std::uint32_t kFrameBufferInitCapacity = udp_server::kChunkSize * 1'000;
-}
+constexpr std::uint8_t kHeaderSize    = 10;
+constexpr std::size_t  kMaxPacketSize = kHeaderSize + frame_buffer::kMaxChunkSize;
+} // namespace
 
 namespace frame_buffer
 {
 
-FrameBuffer::FrameBuffer() : m_waited_frame_size{0}
+FrameBuffer::FrameBuffer(IFrameConsumer& consumer)
+    : m_frame_consumer{consumer}
+    , m_is_running{true}
+    , m_thread{"Frame Buffer",
+               [this]()
+               {
+                   while (m_is_running)
+                   {
+                       {
+                           std::unique_lock lock{m_datagrams_queue_mutex};
+                           m_datagrams_queue_cv.wait(lock, [this]() { return !m_datagrams_queue.empty(); });
+                       }
+                       ProcessDatagram();
+                   }
+               }}
 {
-    m_buffer.reserve(kFrameBufferInitCapacity);
 }
 
-void FrameBuffer::Subscribe(IFrameConsumer& consumer)
+void FrameBuffer::OnDatagram(const std::array<std::uint8_t, udp_server::kMaxDatagramSize>& datagram, std::size_t size)
 {
-    m_frame_consumers.emplace_back(consumer);
-}
-
-void FrameBuffer::OnNewFrame(std::uint32_t frame_size)
-{
-    m_waited_frame_size = frame_size;
-    m_buffer.clear();
-}
-
-void FrameBuffer::OnFrameChunk(const std::array<std::uint8_t, udp_server::kChunkSize>& chunk, std::uint16_t chunk_size)
-{
-    m_buffer.insert(m_buffer.end(), chunk.begin(), chunk.begin() + chunk_size);
-
-    if (m_buffer.size() >= m_waited_frame_size)
     {
-        for (auto consumer : m_frame_consumers)
+        std::lock_guard lock{m_datagrams_queue_mutex};
+        m_datagrams_queue.emplace(datagram, size);
+    }
+
+    m_datagrams_queue_cv.notify_one();
+}
+
+void FrameBuffer::ProcessDatagram()
+{
+    std::array<std::uint8_t, udp_server::kMaxDatagramSize> datagram{};
+    std::size_t                                            size{};
+
+    {
+        std::lock_guard lock{m_datagrams_queue_mutex};
+        const auto& [q_datagram, q_size] = m_datagrams_queue.front();
+        datagram                         = q_datagram;
+        size                             = q_size;
+        m_datagrams_queue.pop();
+    }
+
+    if (size < kHeaderSize)
+    {
+        return;
+    }
+
+    std::uint32_t frame_id     = *reinterpret_cast<const std::uint32_t*>(datagram.data());
+    std::uint16_t chunk_id     = *reinterpret_cast<const std::uint16_t*>(datagram.data() + 4);
+    std::uint16_t total_chunks = *reinterpret_cast<const std::uint16_t*>(datagram.data() + 6);
+    std::uint16_t chunk_size   = *reinterpret_cast<const std::uint16_t*>(datagram.data() + 8);
+
+    // std::cerr << "=======================\n";
+    // std::cerr << "recv_size: " << size << '\n';
+    // std::cerr << "frame_id: " << frame_id << '\n';
+    // std::cerr << "chunk_id: " << chunk_id << '\n';
+    // std::cerr << "total_chunks: " << total_chunks << '\n';
+    // std::cerr << "chunk_size: " << chunk_size << '\n';
+
+    assert(chunk_size != 0);
+    assert(size == kHeaderSize + chunk_size);
+    assert(chunk_id < total_chunks);
+    assert(chunk_id < kMaxChunks);
+
+    auto it = m_frames.find(frame_id);
+    if (it == m_frames.end())
+    {
+        it = m_frames.emplace(frame_id, Frame{}).first;
+    }
+    else
+    {
+        assert(it->second.total_chunks == total_chunks);
+    }
+
+    auto& frame = it->second;
+    auto& chunk = frame.chunks[chunk_id];
+
+    chunk.size = chunk_size;
+
+    std::memcpy(chunk.data.begin(), datagram.begin() + kHeaderSize, chunk_size);
+
+    frame.total_chunks     = total_chunks;
+    frame.received_chunk_count++;
+
+    if (frame.received_chunk_count == frame.total_chunks)
+    {
+        std::vector<std::uint8_t> frame_data;
+
+        for (const auto& [data, size] : frame.chunks)
         {
-            consumer.get().OnFrame(std::move(m_buffer));
+            frame_data.insert(frame_data.end(), data.begin(), data.begin() + size);
         }
 
-        m_buffer.clear();
+        m_frame_consumer.OnFrame(std::move(frame_data));
+
+        m_frames.erase(it);
     }
 }
 

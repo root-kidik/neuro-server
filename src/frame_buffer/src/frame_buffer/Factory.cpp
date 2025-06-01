@@ -4,9 +4,9 @@
 namespace frame_buffer
 {
 
-std::unique_ptr<IFrameBuffer> MakeFrameBuffer()
+std::unique_ptr<IFrameBuffer> MakeFrameBuffer(IFrameConsumer& consumer)
 {
-    return std::make_unique<FrameBuffer>();
+    return std::make_unique<FrameBuffer>(consumer);
 }
 
 } // namespace frame_buffer

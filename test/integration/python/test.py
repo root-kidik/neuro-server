@@ -20,6 +20,8 @@ while True:
         if len(data) < 10:
             continue
 
+        print(len(data))
+
         # Разбор заголовка
         frame_id = int.from_bytes(data[0:4], 'little')
         packet_idx = int.from_bytes(data[4:6], 'little')
