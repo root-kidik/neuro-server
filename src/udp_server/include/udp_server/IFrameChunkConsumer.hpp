@@ -6,7 +6,7 @@
 namespace udp_server
 {
 
-inline constexpr std::uint16_t kChunkSize = 1'024;
+inline constexpr std::uint16_t kChunkSize = 1'400;
 
 class IFrameChunkConsumer
 {

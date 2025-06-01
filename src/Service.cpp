@@ -5,10 +5,10 @@ namespace neuro_server
 {
 
 Service::Service()
-    : m_udp_server{udp_server::MakeUdpServer()}
+    : m_frame_buffer{frame_buffer::MakeFrameBuffer()}
+    , m_udp_server{udp_server::MakeUdpServer(*m_frame_buffer)}
     , m_websocket_server{websocket_server::MakeWebsocketServer()}
-    , m_frame_buffer{frame_buffer::MakeFrameBuffer()}
-    , m_yolo{yolo::MakeYolo({.model_path{"/workspaces/neuro-server/config/yolo11l.onnx"}, .is_cuda_enabled{true}})}
+    , m_yolo{yolo::MakeYolo({.model_path{"/workspaces/neuro-server/config/yolo11n.onnx"}})}
     , m_is_runned{true}
     , m_thread{"Service",
                [this]()
@@ -25,8 +25,7 @@ Service::Service()
                            m_frames_queue.pop();
                        }
 
-                       auto image = cv::imdecode(cv::Mat(1, static_cast<int>(frame.size()), CV_8UC1, frame.data()),
-                                                 cv::IMREAD_COLOR);
+                        cv::Mat image = cv::imdecode(frame, cv::IMREAD_COLOR);
 
                        if (image.empty())
                        {
@@ -69,7 +68,6 @@ Service::Service()
                    }
                }}
 {
-    m_udp_server->Subscribe(*m_frame_buffer);
     m_frame_buffer->Subscribe(*this);
 }
 

@@ -1,4 +1,5 @@
 #include <udp_server/UdpServer.hpp>
+#include <iostream>
 
 namespace
 {
@@ -8,8 +9,9 @@ constexpr std::uint16_t kUdpPort = 8'010;
 namespace udp_server
 {
 
-UdpServer::UdpServer()
-    : m_socket{m_io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), kUdpPort)}
+UdpServer::UdpServer(IFrameChunkConsumer& chunk_consumer)
+    : m_chunk_consumer{chunk_consumer}
+    , m_socket{m_io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), kUdpPort)}
     , m_waited_size{0}
     , m_received_size{0}
     , m_thread{"udp",
@@ -26,40 +28,36 @@ UdpServer::~UdpServer()
     m_io_context.stop();
 }
 
-void UdpServer::Subscribe(IFrameChunkConsumer& consumer)
-{
-    m_chunk_consumer = consumer;
-}
-
 boost::asio::awaitable<void> UdpServer::ReceiveChunk()
 {
     std::array<std::uint8_t, kChunkSize> buffer{};
 
     boost::asio::ip::udp::endpoint remote_endpoint;
 
-    co_await m_socket.async_receive_from(boost::asio::buffer(&m_waited_size, sizeof(m_waited_size)),
-                                         remote_endpoint,
-                                         boost::asio::use_awaitable);
-
     for (;;)
     {
         if (m_received_size >= m_waited_size)
         {
-            co_await m_socket.async_receive_from(boost::asio::buffer(&m_waited_size, sizeof(m_waited_size)),
+            std::size_t bytes_read = 0;
+            while (bytes_read != 4)
+            {
+                bytes_read =  co_await m_socket.async_receive_from(boost::asio::buffer(&m_waited_size, sizeof(m_waited_size)),
                                                  remote_endpoint,
                                                  boost::asio::use_awaitable);
+            }
             m_received_size = 0;
 
-            assert(m_chunk_consumer && "cnunk consumer must exist");
-            m_chunk_consumer->get().OnNewFrame(m_waited_size);
+            std::cerr << "wait: " << m_waited_size << '\n'; 
+
+            m_chunk_consumer.OnNewFrame(m_waited_size);
         }
 
         std::size_t bytes_received = co_await m_socket.async_receive_from(boost::asio::buffer(buffer.data(), buffer.size()),
                                                                           remote_endpoint,
                                                                           boost::asio::use_awaitable);
 
-        assert(m_chunk_consumer && "cnunk consumer must exist");
-        m_chunk_consumer->get().OnFrameChunk(buffer, bytes_received);
+        std::cerr << "recv: " << m_received_size << '\n'; 
+        m_chunk_consumer.OnFrameChunk(buffer, bytes_received);
         m_received_size += bytes_received;
     }
 }

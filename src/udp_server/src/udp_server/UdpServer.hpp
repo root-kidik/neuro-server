@@ -15,15 +15,13 @@ class UdpServer final
     , private boost::asio::noncopyable
 {
 public:
-    explicit UdpServer();
+    explicit UdpServer(IFrameChunkConsumer& chunk_consumer);
     ~UdpServer() override;
-
-    void Subscribe(IFrameChunkConsumer& consumer) override;
 
 private:
     boost::asio::awaitable<void> ReceiveChunk();
 
-    std::optional<std::reference_wrapper<IFrameChunkConsumer>> m_chunk_consumer;
+    IFrameChunkConsumer& m_chunk_consumer;
 
     boost::asio::io_context m_io_context;
 

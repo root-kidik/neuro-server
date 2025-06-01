@@ -4,9 +4,9 @@
 namespace udp_server
 {
 
-std::unique_ptr<IUdpServer> MakeUdpServer()
+std::unique_ptr<IUdpServer> MakeUdpServer(IFrameChunkConsumer& frame_chunk_consumer)
 {
-    return std::make_unique<UdpServer>();
+    return std::make_unique<UdpServer>(frame_chunk_consumer);
 }
 
 } // namespace udp_server

@@ -17,7 +17,7 @@ FrameBuffer::FrameBuffer() : m_waited_frame_size{0}
 
 void FrameBuffer::Subscribe(IFrameConsumer& consumer)
 {
-    m_frame_consumer = consumer;
+    m_frame_consumers.emplace_back(consumer);
 }
 
 void FrameBuffer::OnNewFrame(std::uint32_t frame_size)
@@ -32,7 +32,11 @@ void FrameBuffer::OnFrameChunk(const std::array<std::uint8_t, udp_server::kChunk
 
     if (m_buffer.size() >= m_waited_frame_size)
     {
-        m_frame_consumer->get().OnFrame(std::move(m_buffer));
+        for (auto consumer : m_frame_consumers)
+        {
+            consumer.get().OnFrame(std::move(m_buffer));
+        }
+
         m_buffer.clear();
     }
 }

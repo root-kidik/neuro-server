@@ -22,9 +22,9 @@ public:
     void OnFrame(std::vector<std::uint8_t>&& frame) override;
 
 private:
+    std::unique_ptr<frame_buffer::IFrameBuffer>         m_frame_buffer;
     std::unique_ptr<udp_server::IUdpServer>             m_udp_server;
     std::unique_ptr<websocket_server::IWebsocketServer> m_websocket_server;
-    std::unique_ptr<frame_buffer::IFrameBuffer>         m_frame_buffer;
     std::shared_ptr<yolo::IYolo>                        m_yolo;
 
     std::queue<std::vector<std::uint8_t>> m_frames_queue;

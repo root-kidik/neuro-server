@@ -23,7 +23,7 @@ public:
     void OnFrameChunk(const std::array<std::uint8_t, udp_server::kChunkSize>& chunk, std::uint16_t chunk_size) override;
 
 private:
-    std::optional<std::reference_wrapper<IFrameConsumer>> m_frame_consumer;
+    std::vector<std::reference_wrapper<IFrameConsumer>> m_frame_consumers;
 
     std::vector<std::uint8_t> m_buffer;
 
