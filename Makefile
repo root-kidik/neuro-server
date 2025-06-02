@@ -31,7 +31,7 @@ clear:
 
 .PHONY: format
 format:
-	find src -name '*pp' -type f | xargs clang-format -i
+	find src -name '*pp' -type f | xargs clang-format-19 -i
 
 .PHONY: style
 style:

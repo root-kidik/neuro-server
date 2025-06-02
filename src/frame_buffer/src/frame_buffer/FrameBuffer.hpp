@@ -44,8 +44,6 @@ public:
     void OnDatagram(const std::array<std::uint8_t, udp_server::kMaxDatagramSize>& datagram, std::size_t size) override;
 
 private:
-    void ProcessDatagram();
-
     IFrameConsumer& m_frame_consumer;
     Frame           m_frame;
 

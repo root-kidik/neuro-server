@@ -25,11 +25,11 @@ WebsocketServer::~WebsocketServer()
     m_io_context.stop();
 }
 
-void WebsocketServer::OnFrame(std::vector<std::uint8_t>&& frame)
+void WebsocketServer::OnJpeg(std::vector<std::uint8_t>&& jpeg)
 {
     {
         std::lock_guard lock{m_mutex};
-        m_frames.push(std::move(frame));
+        m_jpegs.push(std::move(jpeg));
     }
 
     m_cv.notify_one();
@@ -55,10 +55,10 @@ boost::asio::awaitable<void> WebsocketServer::StreamFrames(boost::beast::websock
         std::vector<std::uint8_t> frame;
         {
             std::unique_lock lock{m_mutex};
-            m_cv.wait(lock, [this]() { return !m_frames.empty(); });
+            m_cv.wait(lock, [this]() { return !m_jpegs.empty(); });
 
-            frame = std::move(m_frames.front());
-            m_frames.pop();
+            frame = std::move(m_jpegs.front());
+            m_jpegs.pop();
         }
 
         ws.binary(true);

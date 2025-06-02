@@ -3,7 +3,6 @@
 #include <mutex>
 #include <queue>
 
-#include <frame_buffer/IFrameConsumer.hpp>
 #include <websocket_server/IWebsocketServer.hpp>
 
 #include <boost/asio.hpp>
@@ -22,7 +21,7 @@ public:
     explicit WebsocketServer();
     ~WebsocketServer() override;
 
-    void OnFrame(std::vector<std::uint8_t>&& frame) override;
+    void OnJpeg(std::vector<std::uint8_t>&& jpeg) override;
 
 private:
     boost::asio::awaitable<void> Listen();
@@ -34,7 +33,7 @@ private:
 
     core::Thread m_thread;
 
-    std::queue<std::vector<std::uint8_t>> m_frames;
+    std::queue<std::vector<std::uint8_t>> m_jpegs;
     std::condition_variable               m_cv;
     std::mutex                            m_mutex;
 };
