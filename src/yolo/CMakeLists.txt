@@ -1,8 +1,12 @@
 set(TARGET_NAME yolo)
 
 set(ONNXRUNTIME_VERSION 1.21.0)
-set(ONNXRUNTIME_TYPE "onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}")
+
+# set(ONNXRUNTIME_TYPE "onnxruntime-linux-x64-gpu-${ONNXRUNTIME_VERSION}")
+set(ONNXRUNTIME_TYPE "onnxruntime-linux-x64-rocm-${ONNXRUNTIME_VERSION}")
+
 set(ONNXRUNTIME_DIR "/opt/${ONNXRUNTIME_TYPE}")
+
 
 file(GLOB_RECURSE SRC *.cpp)
 

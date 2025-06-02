@@ -36,6 +36,13 @@ Yolo::Yolo(const YoloInitParams& params)
         sessionm_options.AppendExecutionProvider_CUDA(cudam_options);
     }
 
+    if (params.is_rocm_enabled)
+    {
+        OrtROCMProviderOptions rocm_options{};
+        rocm_options.device_id = 0;
+        sessionm_options.AppendExecutionProvider_ROCM(rocm_options);
+    }
+
     sessionm_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
     sessionm_options.SetIntraOpNumThreads(std::thread::hardware_concurrency());
     sessionm_options.SetLogSeverityLevel(3);

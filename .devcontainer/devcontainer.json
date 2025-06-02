@@ -11,7 +11,9 @@
         "--network=host",
         "--env=DISPLAY=${localEnv:DISPLAY}",
         "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
-        "--volume=/dev:/dev"
+        "--volume=/dev:/dev",
+        "--security-opt",
+        "seccomp=unconfined"
     ],
     "customizations": {
         "vscode": {

@@ -15,6 +15,7 @@ struct YoloInitParams
     float non_max_suppression_threshold  = 0.5F;
     bool  is_cuda_enabled                = false;
     bool  is_half_enabled                = false;
+    bool  is_rocm_enabled                = false;
 };
 
 } // namespace yolo
